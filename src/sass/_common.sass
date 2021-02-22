@@ -1,6 +1,7 @@
 .team
-  height: 100vh
+  min-height: 1200px
   position: relative
+  overflow-x: hidden
 
 .group
   height: 100px
@@ -19,6 +20,7 @@
 .member
   width: fit-content
   position: absolute
+  transform: scale(0)
 
   &__name
     display: none
@@ -31,6 +33,14 @@
     &_big
       width: 200px
       height: 200px
+
+    &_middle
+      width: 170px
+      height: 170px
+
+    &_small
+      width: 140px
+      height: 140px
 
   &__image
     min-width: 100%

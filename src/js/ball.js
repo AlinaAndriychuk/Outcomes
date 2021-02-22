@@ -1,3 +1,5 @@
+import gsap from 'gsap'
+
 export default class Ball {
   constructor(circle, x, y) {
     this.ball = circle;
@@ -29,21 +31,19 @@ export default class Ball {
   //   this.y = y;
   // }
 
-  think(x, y, radius) {
+  think(x, y) {
     const dx = this.x - x;
     const dy = this.y - y;
 
     // const dist = Math.sqrt(dx*dx + dy*dy);
     
     // interaction
-    // if (dist < radius) {
-      const angle = Math.atan2(dy, dx);
-      const tx = this.x + Math.cos(angle) * this.power;
-      const ty = this.y + Math.sin(angle) * this.power;
+    const angle = Math.atan2(dy, dx);
+    const tx = this.x + Math.cos(angle) * this.power;
+    const ty = this.y + Math.sin(angle) * this.power;
 
-      this.vx += tx - this.x;
-      this.vy += ty - this.y;
-    // }
+    this.vx += tx - this.x;
+    this.vy += ty - this.y;
 
     // spring back
     // const dx1 = -(this.x - this.originalX);
@@ -62,7 +62,9 @@ export default class Ball {
   }
 
   move() {
-    this.ball.style.left = `${this.x  }px`;
-    this.ball.style.top = `${this.y  }px`;
+    gsap.to(this.ball, {
+      x: this.x,
+      y: this.y
+    });
   }
 }
