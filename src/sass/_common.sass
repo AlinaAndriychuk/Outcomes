@@ -1,0 +1,42 @@
+.team
+  height: 100vh
+  position: relative
+
+.group
+  height: 100px
+  width: 100px
+  position: absolute
+
+  background-color: #44969c
+  border-radius: 50%
+  cursor: pointer
+
+  &__text
+    text-align: center
+    color: #ffffff
+    line-height: 100px
+  
+.member
+  width: fit-content
+  position: absolute
+
+  &__name
+    display: none
+    text-align: center
+
+  &__circle
+    border-radius: 50%
+    overflow: hidden
+
+    &_big
+      width: 200px
+      height: 200px
+
+  &__image
+    min-width: 100%
+    height: 100%
+    position: relative
+    left: 50%
+    top: 50%
+
+    transform: translate(-50%, -50%)
