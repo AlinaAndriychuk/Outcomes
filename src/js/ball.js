@@ -6,8 +6,8 @@ export default class Ball {
     this.isGroup = circle.classList.contains('js-group');
     this.x = x || 0;
     this.y = y || 0;
-    // this.originalX = x || 0;
-    // this.originalY = y || 0;
+    this.originalX = x || 0;
+    this.originalY = y || 0;
     this.vx = 0;
     this.vy = 0;
     // this.friction = 0.9;
@@ -26,10 +26,10 @@ export default class Ball {
     this.ball.addEventListener('click', ()=> {})
   }
 
-  // setPosition(x, y) {
-  //   this.x = x;
-  //   this.y = y;
-  // }
+  setPosition(x, y) {
+    this.x = x;
+    this.y = y;
+  }
 
   think(x, y) {
     const dx = this.x - x;
@@ -39,11 +39,11 @@ export default class Ball {
     
     // interaction
     const angle = Math.atan2(dy, dx);
-    const tx = this.x + Math.cos(angle) * this.power;
-    const ty = this.y + Math.sin(angle) * this.power;
+    const tx = this.x + Math.cos(angle);
+    const ty = this.y + Math.sin(angle);
 
-    this.vx += tx - this.x;
-    this.vy += ty - this.y;
+    this.vx = (tx - this.x) * this.power;
+    this.vy = (ty - this.y) * this.power;
 
     // spring back
     // const dx1 = -(this.x - this.originalX);
@@ -61,10 +61,42 @@ export default class Ball {
     this.y += this.vy;
   }
 
+  hide() {
+    gsap.to(this.ball.querySelector('.js-image'), {
+      scale: this.scale,
+      y:"+= 20",
+    });
+
+    gsap.to(this.ball.querySelector('.js-text'), {
+      scale: 0,
+      y:"+= 20",
+      display: 'none',
+      duration: 0.3
+    });
+  }
+
+  show() {
+    this.scale = gsap.getProperty(this.ball.querySelector('.js-image'), "scale");
+    gsap.to(this.ball.querySelector('.js-image'), {
+      scale: 1,
+      y:"-= 20",
+    });
+
+    gsap.to(this.ball.querySelector('.js-text'), {
+      scale: 1,
+      y:"-= 20",
+      delay: 0.1,
+      display: 'block',
+      duration: 0.3,
+    });
+  }
+
   move() {
     gsap.to(this.ball, {
       x: this.x,
-      y: this.y
+      y: this.y,
+      ease: 'back.out(1.5)',
+      duration: 0.5
     });
   }
 }

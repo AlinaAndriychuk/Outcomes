@@ -7,6 +7,7 @@ class Animation {
     this.container = container;
     this.circles = this.container.getElementsByClassName('js-circle');
     this.balls = [];
+    this.currentBall = {ball: null};
 
     this.ballsOptions = [
       {x: 730, y: 200},
@@ -15,8 +16,8 @@ class Animation {
       {x: 430, y: 540},
       {x: 1070, y: 470},
       {x: 450, y: 50},
-      {x: 650, y: 20},
-      {x: 350, y: 170},
+      {x: 630, y: 10},
+      {x: 310, y: 150},
       {x: 200, y: 250},
       {x: 10, y: 70},
       {x: 220, y: 0},
@@ -70,6 +71,7 @@ class Animation {
       }
     })
 
+    // window.addEventListener('resize', this.resize.bind(this))
   }
 
   groupHandler (target) {
@@ -90,17 +92,55 @@ class Animation {
   }
 
   moveBalls(target) {
-    const rect = target.getBoundingClientRect();
+
+    if(target === this.currentBall.ball) {
+      this.balls.forEach( ball => {
+        if(ball.ball === target) {
+          ball.hide();
+          this.currentBall = {ball: null};
+          return;
+        }
   
-    this.balls.forEach( ball => {
-      if(ball.ball === target) {
-        return;
+        ball.setPosition(ball.originalX, ball.originalY)
+        ball.move();
+      });
+    } else {
+      if (this.currentBall.ball !== null) {
+        this.currentBall.hide();
+        this.currentBall = {ball: null};
+
+        this.balls.forEach( ball => {
+          ball.setPosition(ball.originalX, ball.originalY)
+          ball.move();
+        });
       }
-  
-      ball.think(rect.left, rect.top, rect.width);
-      ball.move();
-    });
+
+      const left = gsap.getProperty(target, "x");
+      const top = gsap.getProperty(target, "y");
+      const width = gsap.getProperty(target, "width");
+
+      this.balls.forEach( ball => {
+        if(ball.ball === target) {
+          this.currentBall = ball;
+          ball.show();
+          return;
+        }
+
+        ball.think(left, top, width);
+        ball.move();
+      });
+    }
   }
+
+  // resize() {
+  //   this.ballsOptions.forEach( (option, index) => {
+  //     if(option.x + this.balls[index].ball.clientWidth > window.innerWidth) {
+  //       this.balls[index].setPosition(window.innerWidth - this.balls[index].ball.clientWidth);
+  //       this.balls[index].move()
+  //     }
+  //   });
+  //   console.log(this.container)
+  // }
 
 }
 
