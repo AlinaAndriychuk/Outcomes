@@ -12,7 +12,7 @@ export default class Ball {
     this.vy = 0;
     // this.friction = 0.9;
     // this.springFactor = 0.01;
-    this.power = 50;
+    this.power = 70;
 
     this.init()
   }
@@ -62,7 +62,7 @@ export default class Ball {
   }
 
   hide() {
-    gsap.to(this.ball.querySelector('.js-image'), {
+    gsap.to(this.ball, {
       scale: this.scale,
       y:"+= 20",
     });
@@ -76,8 +76,8 @@ export default class Ball {
   }
 
   show() {
-    this.scale = gsap.getProperty(this.ball.querySelector('.js-image'), "scale");
-    gsap.to(this.ball.querySelector('.js-image'), {
+    this.scale = gsap.getProperty(this.ball, "scale");
+    gsap.to(this.ball, {
       scale: 1,
       y:"-= 20",
     });

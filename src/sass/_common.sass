@@ -1,8 +1,7 @@
 .team
   min-height: 1400px
-  width: 1400px
-  // margin: 0 auto
-  // padding-top: 50px
+  width: 1450px
+  margin: 0 auto
   position: relative
   overflow-x: hidden
 
@@ -21,32 +20,25 @@
     line-height: 100px
   
 .member
-  width: fit-content
   position: absolute
   transform: scale(0)
+  width: 200px
+  height: 200px
+
+  cursor: pointer
 
   &__name
+    padding-top: 25px
     transform: scale(0)
+
+    font-size: 20px
     line-height: 40px
     text-align: center
-    display: none
 
   &__circle
     border-radius: 50%
     overflow: hidden
-    width: 200px
-    height: 200px
-
-    cursor: pointer
-
-    &_big
-      transform: scale(1)
-
-    &_middle
-      transform: scale(0.8)
-
-    &_small
-      transform: scale(0.7)
+    height: 100%
 
   &__image
     min-width: 100%
