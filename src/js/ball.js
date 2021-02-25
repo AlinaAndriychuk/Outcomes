@@ -43,7 +43,7 @@ export default class Ball {
     const ty = this.y + Math.sin(angle);
 
     this.vx = (tx - this.x) * this.power;
-    this.vy = (ty - this.y) * this.power;
+    this.vy = (ty - this.y) * this.power * 1.1;
 
     // spring back
     // const dx1 = -(this.x - this.originalX);
@@ -73,15 +73,19 @@ export default class Ball {
       display: 'none',
       duration: 0.3
     });
+
+    // const left = gsap.getProperty(this.ball, "x");
+    // const top = gsap.getProperty(this.ball, "y");
+    // this.setPosition(left, top)
   }
 
   show() {
     this.scale = gsap.getProperty(this.ball, "scale");
+
     gsap.to(this.ball, {
       scale: 1,
       y:"-= 20",
     });
-
     gsap.to(this.ball.querySelector('.js-text'), {
       scale: 1,
       y:"-= 20",
@@ -89,6 +93,10 @@ export default class Ball {
       display: 'block',
       duration: 0.3,
     });
+
+    // const left = gsap.getProperty(this.ball, "x");
+    // const top = gsap.getProperty(this.ball, "y");
+    // this.setPosition(left, top)
   }
 
   move() {

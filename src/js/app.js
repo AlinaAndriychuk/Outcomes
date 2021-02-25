@@ -67,7 +67,7 @@ class Animation {
       if (e.target.closest('.js-group')) {
         this.groupHandler(e.target.closest('.js-group'));
       } else if (e.target.closest('.js-circle')) {
-        this.moveBalls(e.target.closest('.js-circle'));
+        this.directBalls(e.target.closest('.js-circle'));
       }
     })
 
@@ -103,45 +103,51 @@ class Animation {
     target.classList.toggle('is-opened');
   }
 
-  moveBalls(target) {
-
-    if(target === this.currentBall.ball) {
-      this.balls.forEach( ball => {
-        if(ball.ball === target) {
-          ball.hide();
-          this.currentBall = {ball: null};
-          return;
-        }
-  
-        ball.setPosition(ball.originalX, ball.originalY)
-        ball.move();
-      });
-    } else {
-      if (this.currentBall.ball !== null) {
-        this.currentBall.hide();
-        this.currentBall = {ball: null};
-
-        this.balls.forEach( ball => {
-          ball.setPosition(ball.originalX, ball.originalY)
-          ball.move();
-        });
+  unsetBalls() {
+    this.balls.forEach( ball => {
+      if(ball === this.currentBall) {
+        ball.hide();
       }
 
-      const left = gsap.getProperty(target, "x");
-      const top = gsap.getProperty(target, "y");
-      const width = gsap.getProperty(target, "width");
+      ball.setPosition(ball.originalX, ball.originalY);
+      ball.move();
+    });
+  }
 
-      this.balls.forEach( ball => {
-        if(ball.ball === target) {
-          this.currentBall = ball;
-          ball.show();
-          return;
-        }
+  directBalls(target) {
+    if(target === this.currentBall.ball) {
+      this.unsetBalls();
+      this.currentBall = {ball: null}
+    } else {
+      if (this.currentBall.ball !== null) {
+        this.unsetBalls();
+      }
 
-        ball.think(left, top, width);
-        ball.move();
-      });
+      setTimeout(this.moveBalls.bind(this, target), 100)
     }
+  }
+
+  moveBalls(target) {
+    let left;
+    let top;
+
+    this.balls.forEach( ball => {
+      if(ball.ball === target) {
+        this.currentBall = ball;
+
+        ball.show();
+        left = ball.x;
+        top = ball.y;
+      }
+    });
+
+    this.balls.forEach( ball => {
+      if(ball.ball === target) {
+        return
+      }
+      ball.think(left, top);
+      ball.move();
+    });
   }
 
   // resize() {
