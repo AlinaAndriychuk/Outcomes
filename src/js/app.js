@@ -1,4 +1,4 @@
-import gsap from 'gsap'
+import gsap from 'gsap';
 import sayHello from './lib/sayHello';
 import Ball from './ball';
 
@@ -6,6 +6,7 @@ class Animation {
   constructor(container) {
     this.container = container;
     this.circles = this.container.getElementsByClassName('js-circle');
+    this.group = this.container.getElementsByClassName('js-group');
     this.balls = [];
     this.currentBall = {ball: null};
 
@@ -63,47 +64,73 @@ class Animation {
       );
     };
 
-    this.container.addEventListener('click', (e) => {
-      if (e.target.closest('.js-group')) {
-        this.groupHandler(e.target.closest('.js-group'));
-      } else if (e.target.closest('.js-circle')) {
-        this.directBalls(e.target.closest('.js-circle'));
-      }
-    })
+    this.showBalls();
 
-    // window.addEventListener('resize', this.resize.bind(this))
+    this.container.addEventListener('click', this.defineClick.bind(this));
+    // window.addEventListener('resize', this.resize.bind(this));
+  }
+
+  showBalls() {
+    gsap.from(this.group, {
+      y: "+=50",
+      opacity: 0,
+      
+      ease: 'elastic.out(1, 0.4)',
+      stagger: {
+        from: 'random',
+        amount: this.group.length / 10,
+      },
+      duration: Math.max(this.group.length / 10, 1)
+    })
+  }
+
+  defineClick(e) {
+    if (e.target.closest('.js-group')) {
+      this.groupHandler(e.target.closest('.js-group'));
+    } else if (e.target.closest('.js-circle')) {
+      this.defineCurrentBall(e.target.closest('.js-circle'));
+    }
   }
 
   groupHandler (target) {
     const groupName = target.dataset.group;
-    const group = this.container.getElementsByClassName(`js-${  groupName}`);
+    this.group = this.container.getElementsByClassName(`js-${  groupName}`);
     
     if(target.classList.contains('is-opened')) {
-      gsap.to(group, {
-        scale: 0,
-      })
+      gsap.to(this.group,{
+        opacity: 0,
+        display: 'none',
+        duration: 0.5
+      });
+
+      // this.hideBalls()
     } else {
-      Array.from(group).forEach( circle => {
-        if (circle.classList.contains('member_big')) {
-          gsap.to(circle, {
-            scale: 1,
-          })
-        } else if (circle.classList.contains('member_small')) {
-          gsap.to(circle, {
-            scale: 0.7,
-          })
-        } else {
-          gsap.to(circle, {
-            scale: 0.8,
-          })
-        }
-      })
+      gsap.to(this.group,{
+        display: 'block',
+        opacity: 1,
+        duration: 0
+      });
+
+      this.showBalls();
     }
   
     target.classList.toggle('is-opened');
   }
 
-  unsetBalls() {
+  defineCurrentBall(target) {
+    if(target === this.currentBall.ball) {
+      this.unsetBallsPosition();
+      this.currentBall = {ball: null}
+    } else {
+      if (this.currentBall.ball !== null) {
+        this.unsetBallsPosition();
+      }
+
+      setTimeout(this.openUpBalls.bind(this, target), 100)
+    }
+  }
+
+  unsetBallsPosition() {
     this.balls.forEach( ball => {
       if(ball === this.currentBall) {
         ball.hide();
@@ -114,20 +141,7 @@ class Animation {
     });
   }
 
-  directBalls(target) {
-    if(target === this.currentBall.ball) {
-      this.unsetBalls();
-      this.currentBall = {ball: null}
-    } else {
-      if (this.currentBall.ball !== null) {
-        this.unsetBalls();
-      }
-
-      setTimeout(this.moveBalls.bind(this, target), 100)
-    }
-  }
-
-  moveBalls(target) {
+  openUpBalls(target) {
     let left;
     let top;
 
@@ -145,6 +159,7 @@ class Animation {
       if(ball.ball === target) {
         return
       }
+
       ball.think(left, top);
       ball.move();
     });
@@ -159,7 +174,6 @@ class Animation {
   //   });
   //   console.log(this.container)
   // }
-
 }
 
 const container = document.querySelector('.team');

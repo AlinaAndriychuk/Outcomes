@@ -18,12 +18,11 @@ export default class Ball {
   }
 
   init() {
-    this.addHandler();
-    this.move();
-  }
-
-  addHandler() {
-    this.ball.addEventListener('click', ()=> {})
+    gsap.to(this.ball, {
+      x: this.x,
+      y: this.y,
+      duration: 0,
+    });
   }
 
   setPosition(x, y) {
@@ -34,7 +33,6 @@ export default class Ball {
   think(x, y) {
     const dx = this.x - x;
     const dy = this.y - y;
-
     // const dist = Math.sqrt(dx*dx + dy*dy);
     
     // interaction
@@ -73,10 +71,6 @@ export default class Ball {
       display: 'none',
       duration: 0.3
     });
-
-    // const left = gsap.getProperty(this.ball, "x");
-    // const top = gsap.getProperty(this.ball, "y");
-    // this.setPosition(left, top)
   }
 
   show() {
@@ -86,6 +80,7 @@ export default class Ball {
       scale: 1,
       y:"-= 20",
     });
+
     gsap.to(this.ball.querySelector('.js-text'), {
       scale: 1,
       y:"-= 20",
@@ -93,10 +88,6 @@ export default class Ball {
       display: 'block',
       duration: 0.3,
     });
-
-    // const left = gsap.getProperty(this.ball, "x");
-    // const top = gsap.getProperty(this.ball, "y");
-    // this.setPosition(left, top)
   }
 
   move() {
@@ -104,7 +95,7 @@ export default class Ball {
       x: this.x,
       y: this.y,
       ease: 'back.out(1.5)',
-      duration: 0.5
+      duration: 0.5,
     });
   }
 }

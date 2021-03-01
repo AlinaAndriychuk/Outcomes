@@ -21,11 +21,18 @@
   
 .member
   position: absolute
-  transform: scale(0)
   width: 200px
   height: 200px
+  display: none
 
+  transform: scale(0.8)
   cursor: pointer
+
+  &_big
+    transform: scale(1)
+
+  &_small
+    transform: scale(0.7)
 
   &__name
     padding-top: 25px
